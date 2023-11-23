@@ -2,10 +2,14 @@
  * Хранилище состояния приложения
  */
 class Store {
+
   constructor(initState = {}) {
+    this.flag =false; //глобальный флаг выделения. изначально ни один элемент не выделен
     this.state = initState;
     this.listeners = []; // Слушатели изменений состояния
+    this.N = this.state.list.length; //глобальный счетчик элементов
   }
+
 
   /**
    * Подписка слушателя на изменения состояния
@@ -42,9 +46,10 @@ class Store {
    * Добавление новой записи
    */
   addItem() {
+  this.N+=1; //увеличиваем глобальный счетчик элементов
     this.setState({
       ...this.state,
-      list: [...this.state.list, {code: this.state.list.length + 1, title: 'Новая запись'}]
+      list: [...this.state.list, {code: this.N, title: 'Новая запись', numb: 0}]
     })
   };
 
@@ -64,10 +69,18 @@ class Store {
    * @param code
    */
   selectItem(code) {
+    this.flag = true
     this.setState({
       ...this.state,
       list: this.state.list.map(item => {
+        //убираем все выделения
+        if (item.code !== code) {
+          item.selected = false;
+
+        }
+        //выделяемый выбранный объект и увеличиваем счетчик нажатия этого элемента 
         if (item.code === code) {
+          item.numb += 1;
           item.selected = !item.selected;
         }
         return item;

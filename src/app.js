@@ -10,6 +10,7 @@ import './styles.css';
 function App({store}) {
 
   const list = store.getState().list;
+  
 
   return (
     <div className='App'>
@@ -26,7 +27,13 @@ function App({store}) {
               <div className={'Item' + (item.selected ? ' Item_selected' : '')}
                    onClick={() => store.selectItem(item.code)}>
                 <div className='Item-code'>{item.code}</div>
-                <div className='Item-title'>{item.title}</div>
+                <div className='Item-title'>
+                  {item.title}
+                  {/*если хоть раз на элемент нажали, то показать количество нажатий на этот элемент*/}
+                  {item.numb> 0 ? ` | Выделяли ${item.numb} раз`: null}
+                  </div>
+             
+               
                 <div className='Item-actions'>
                   <button onClick={() => store.deleteItem(item.code)}>
                     Удалить
